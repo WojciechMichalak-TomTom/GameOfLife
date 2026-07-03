@@ -2,18 +2,19 @@ package org.example.model
 
 import kotlin.random.Random
 
-const val BOARD_SIZE = 5
+//TODO move to constructor
+const val BOARD_SIZE = 3
 
-class Board (var grid: Array<IntArray> = Array<IntArray>(BOARD_SIZE) {
-    IntArray(BOARD_SIZE) {
-        if (Random.nextBoolean())
-            1
-        else
-            0
+class Board (var grid: Array<IntArray> = Array<IntArray>(BOARD_SIZE) {IntArray(BOARD_SIZE)}) {
+
+
+    fun randomize() {
+        for (i in 0 until BOARD_SIZE) {
+            for (j in 0 until BOARD_SIZE) {
+                grid[i][j] = Random.nextInt(0, BOARD_SIZE)
+            }
+        }
     }
-}) {
-
-
 
     fun nextStep() {
         val newGrid = Array(BOARD_SIZE) { IntArray(BOARD_SIZE) }
