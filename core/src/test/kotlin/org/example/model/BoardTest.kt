@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 class BoardTest {
     @Test
     fun nextStepTest() {
-        val board = Board()
+        val board = Board(3)
 
         val arr = arrayOf(
             intArrayOf(0, 0, 1),
@@ -39,7 +39,7 @@ class BoardTest {
 
     @Test
     fun nextStepTest2() {
-        val board = Board()
+        val board = Board(3)
 
         val arr = arrayOf(
             intArrayOf(1, 0, 1),
@@ -64,8 +64,8 @@ class BoardTest {
 
     @Test
     fun randomizeTest() {
-        val board = Board()
-        val board2 = Board()
+        val board = Board(3)
+        val board2 = Board(3)
 
         board.randomize()
         board2.randomize()

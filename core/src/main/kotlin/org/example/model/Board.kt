@@ -2,24 +2,21 @@ package org.example.model
 
 import kotlin.random.Random
 
-//TODO move to constructor
-const val BOARD_SIZE = 3
-
-class Board (var grid: Array<IntArray> = Array<IntArray>(BOARD_SIZE) {IntArray(BOARD_SIZE)}) {
-
+class Board (val size: Int) {
+    var grid: Array<IntArray> = Array(this@Board.size){ IntArray(this@Board.size) }
 
     fun randomize() {
-        for (i in 0 until BOARD_SIZE) {
-            for (j in 0 until BOARD_SIZE) {
-                grid[i][j] = Random.nextInt(0, BOARD_SIZE)
+        for (i in 0 until size) {
+            for (j in 0 until size) {
+                grid[i][j] = Random.nextInt(0, 2)
             }
         }
     }
 
     fun nextStep() {
-        val newGrid = Array(BOARD_SIZE) { IntArray(BOARD_SIZE) }
-            for (i in 0 until BOARD_SIZE) {
-                for (j in 0 until BOARD_SIZE) {
+        val newGrid = Array(size) { IntArray(size) }
+            for (i in 0 until size) {
+                for (j in 0 until size) {
                     val neighbors = getNeighbors(i, j)
 
                     if (grid[i][j] == 1) {
@@ -45,18 +42,17 @@ class Board (var grid: Array<IntArray> = Array<IntArray>(BOARD_SIZE) {IntArray(B
     }
 
     private fun getNeighbors(x: Int, y: Int): Int {
-        val nums = arrayOf(-1, 0, 1)
         var neighbors = 0
 
-        for (numX in nums) {
-            for (numY in nums) {
+        for (numX in -1..1) {
+            for (numY in -1..1) {
                 if (numX == 0 && numY == 0)
                     continue
 
                 val targetX = x + numX
                 val targetY = y + numY
 
-                if (targetX < 0 || targetX > BOARD_SIZE - 1 || targetY < 0 || targetY > BOARD_SIZE - 1) {
+                if (targetX < 0 || targetX > size - 1 || targetY < 0 || targetY > size - 1) {
                     continue
                 }
 
