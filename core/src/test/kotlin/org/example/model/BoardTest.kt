@@ -17,23 +17,23 @@ class BoardTest {
 
         board.nextStep()
 
-        val expectedGrid = arrayOf(
+        var expectedGrid = arrayOf(
             intArrayOf(0, 1, 1),
             intArrayOf(0, 0, 1),
             intArrayOf(0, 0, 1)
         )
 
-        Assertions.assertArrayEquals(expectedGrid, board.grid)
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
 
         board.nextStep()
 
-        val expectedGridSecondStep = arrayOf(
+        expectedGrid = arrayOf(
             intArrayOf(0, 1, 1),
             intArrayOf(0, 0, 1),
             intArrayOf(0, 0, 0)
         )
 
-        Assertions.assertArrayEquals(expectedGridSecondStep, board.grid)
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
 
     }
 
@@ -56,10 +56,10 @@ class BoardTest {
             intArrayOf(0, 1, 0)
         )
 
-        Assertions.assertArrayEquals(expectedGrid, board.grid)
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
 
         board.nextStep()
-        Assertions.assertArrayEquals(expectedGrid, board.grid)
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
     }
 
     @Test
@@ -73,5 +73,54 @@ class BoardTest {
         //TODO check
         Assertions.assertFalse { board.grid.contentDeepEquals(board2.grid) }
     }
+
+
+    @Test
+    fun emptyBoardTest() {
+        val board = Board(3)
+
+        val arr = arrayOf(
+            intArrayOf(0, 0, 0),
+            intArrayOf(0, 0, 0),
+            intArrayOf(0, 0, 0)
+        )
+        board.grid = arr
+
+        board.nextStep()
+
+        val expectedGrid = arrayOf(
+            intArrayOf(0, 0, 0),
+            intArrayOf(0, 0, 0),
+            intArrayOf(0, 0, 0)
+        )
+
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
+
+        board.nextStep()
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
+    }
+
+    @Test
+    fun fullBoardTest() {
+        val board = Board(3)
+
+        val arr = arrayOf(
+            intArrayOf(1, 1, 1),
+            intArrayOf(1, 1, 1),
+            intArrayOf(1, 1, 1)
+        )
+        board.grid = arr
+
+        board.nextStep()
+
+        val expectedGrid = arrayOf(
+            intArrayOf(1, 0, 1),
+            intArrayOf(0, 0, 0),
+            intArrayOf(1, 0, 1)
+        )
+
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
+    }
+
 
 }
