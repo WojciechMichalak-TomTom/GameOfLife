@@ -1,12 +1,12 @@
-package org.example.model
+package org.example.game
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-class BoardTest {
+class BoardConwayRuleTest {
 
-    val D = CellState.DEAD
-    val A = CellState.ALIVE
+    val D = BasicCellState.DEAD
+    val A = BasicCellState.ALIVE
 
     @Test
     fun `3x3 grid pattern next generation test`() {
@@ -15,7 +15,7 @@ class BoardTest {
             arrayOf(D, A, A),
             arrayOf(A, D, A)
         )
-        val board = Board(3, grid)
+        val board = Board(3, grid, ConwayRule())
 
         val board2 = board.nextStep()
 
@@ -37,7 +37,7 @@ class BoardTest {
             arrayOf(D, D, D),
             arrayOf(D, D, D)
         )
-        val board = Board(3, grid)
+        val board = Board(3, grid, ConwayRule())
 
         val board2 = board.nextStep()
 
@@ -57,7 +57,7 @@ class BoardTest {
             arrayOf(D, D, D),
             arrayOf(D, D, D)
         )
-        val board = Board(3, grid)
+        val board = Board(3, grid, ConwayRule())
 
 
         val board2 = board.nextStep()
@@ -79,7 +79,7 @@ class BoardTest {
             arrayOf(A, A, D),
             arrayOf(D, D, D)
         )
-        val board = Board(3, grid)
+        val board = Board(3, grid, ConwayRule())
 
 
         val board2 = board.nextStep()
@@ -101,7 +101,7 @@ class BoardTest {
             arrayOf(A, A, A),
             arrayOf(A, A, A)
         )
-        val board = Board(3, grid)
+        val board = Board(3, grid, ConwayRule())
 
 
         val board2 =  board.nextStep()
@@ -123,7 +123,7 @@ class BoardTest {
             arrayOf(A, D, D),
             arrayOf(D, D, D)
         )
-        val board = Board(3, grid)
+        val board = Board(3, grid, ConwayRule())
 
 
         val board2 = board.nextStep()
