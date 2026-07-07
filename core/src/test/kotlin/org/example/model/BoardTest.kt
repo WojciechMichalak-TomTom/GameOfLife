@@ -4,123 +4,138 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class BoardTest {
-    @Test
-    fun nextStepTest() {
-        val board = Board(3)
 
-        val arr = arrayOf(
-            intArrayOf(0, 0, 1),
-            intArrayOf(0, 1, 1),
-            intArrayOf(1, 0, 1)
-        )
-        board.grid = arr
-
-        board.nextStep()
-
-        var expectedGrid = arrayOf(
-            intArrayOf(0, 1, 1),
-            intArrayOf(0, 0, 1),
-            intArrayOf(0, 0, 1)
-        )
-
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
-
-        board.nextStep()
-
-        expectedGrid = arrayOf(
-            intArrayOf(0, 1, 1),
-            intArrayOf(0, 0, 1),
-            intArrayOf(0, 0, 0)
-        )
-
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
-
-    }
+    val D = CellState.DEAD
+    val A = CellState.ALIVE
 
     @Test
-    fun nextStepTest2() {
-        val board = Board(3)
-
-        val arr = arrayOf(
-            intArrayOf(1, 0, 1),
-            intArrayOf(0, 1, 0),
-            intArrayOf(1, 0, 1)
+    fun `3x3 grid pattern next generation test`() {
+        val grid = arrayOf(
+            arrayOf(D, D, A),
+            arrayOf(D, A, A),
+            arrayOf(A, D, A)
         )
-        board.grid = arr
+        val board = Board(3, grid)
 
-        board.nextStep()
+        val board2 = board.nextStep()
 
         val expectedGrid = arrayOf(
-            intArrayOf(0, 1, 0),
-            intArrayOf(1, 0, 1),
-            intArrayOf(0, 1, 0)
+            arrayOf(D, A, A),
+            arrayOf(D, D, A),
+            arrayOf(D, D, A)
         )
 
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
 
-        board.nextStep()
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
-    }
-
-    @Test
-    fun randomizeTest() {
-        val board = Board(3)
-        val board2 = Board(3)
-
-        board.randomize()
-        board2.randomize()
-
-        //TODO check
-        Assertions.assertFalse { board.grid.contentDeepEquals(board2.grid) }
     }
 
 
     @Test
-    fun emptyBoardTest() {
-        val board = Board(3)
-
-        val arr = arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
+    fun `Empty board remains empty in next generation test`() {
+        val grid = arrayOf(
+            arrayOf(D, D, D),
+            arrayOf(D, D, D),
+            arrayOf(D, D, D)
         )
-        board.grid = arr
+        val board = Board(3, grid)
 
-        board.nextStep()
+        val board2 = board.nextStep()
 
         val expectedGrid = arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
+            arrayOf(D, D, D),
+            arrayOf(D, D, D),
+            arrayOf(D, D, D)
         )
 
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
-
-        board.nextStep()
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
     }
 
     @Test
-    fun fullBoardTest() {
-        val board = Board(3)
-
-        val arr = arrayOf(
-            intArrayOf(1, 1, 1),
-            intArrayOf(1, 1, 1),
-            intArrayOf(1, 1, 1)
+    fun `Live cell with fewer than to 2 neighbours dies test`() {
+        val grid = arrayOf(
+            arrayOf(A, A, D),
+            arrayOf(D, D, D),
+            arrayOf(D, D, D)
         )
-        board.grid = arr
+        val board = Board(3, grid)
 
-        board.nextStep()
+
+        val board2 = board.nextStep()
+
 
         val expectedGrid = arrayOf(
-            intArrayOf(1, 0, 1),
-            intArrayOf(0, 0, 0),
-            intArrayOf(1, 0, 1)
+            arrayOf(D, D, D),
+            arrayOf(D, D, D),
+            arrayOf(D, D, D)
         )
 
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board.grid))
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
     }
 
+    @Test
+    fun `Live cell with 2 or 3 neighbours lives test`() {
+        val grid = arrayOf(
+            arrayOf(A, A, D),
+            arrayOf(A, A, D),
+            arrayOf(D, D, D)
+        )
+        val board = Board(3, grid)
+
+
+        val board2 = board.nextStep()
+
+
+        val expectedGrid = arrayOf(
+            arrayOf(A, A, D),
+            arrayOf(A, A, D),
+            arrayOf(D, D, D)
+        )
+
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
+    }
+
+    @Test
+    fun `Live cell with more than 3 neighbours dies test`() {
+        val grid = arrayOf(
+            arrayOf(A, A, A),
+            arrayOf(A, A, A),
+            arrayOf(A, A, A)
+        )
+        val board = Board(3, grid)
+
+
+        val board2 =  board.nextStep()
+
+
+        val expectedGrid = arrayOf(
+            arrayOf(A, D, A),
+            arrayOf(D, D, D),
+            arrayOf(A, D, A)
+        )
+
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
+    }
+
+    @Test
+    fun `Dead cell with 3 neighbours becomes live cell test`() {
+        val grid = arrayOf(
+            arrayOf(A, A, D),
+            arrayOf(A, D, D),
+            arrayOf(D, D, D)
+        )
+        val board = Board(3, grid)
+
+
+        val board2 = board.nextStep()
+
+
+        val expectedGrid = arrayOf(
+            arrayOf(A, A, D),
+            arrayOf(A, A, D),
+            arrayOf(D, D, D)
+        )
+
+        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
+    }
 
 }
