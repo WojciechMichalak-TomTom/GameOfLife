@@ -31,6 +31,6 @@ class BoardMapper {
             }
         }
 
-        return Board(size, grid, rule)
+        return Board(grid, rule)
     }
 }
