@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class GameControllerTest : AbstractIntegrationTest() {
 
     @Test
-    fun `should keep block stable after next step`() {
+    fun `when next generation of 4x4 grid pattern should return proper next step pattern`() {
 
         val request = """
             {
