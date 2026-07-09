@@ -1,4 +1,4 @@
-package org.example.game
+package org.example.game.core
 
 class ConwayRule : Rule {
     override fun nextState(state: BasicCellState, neighbors: Int): BasicCellState {

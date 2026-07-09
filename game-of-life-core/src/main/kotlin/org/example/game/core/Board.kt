@@ -1,4 +1,4 @@
-package org.example.game
+package org.example.game.core
 
 import kotlin.random.Random
 

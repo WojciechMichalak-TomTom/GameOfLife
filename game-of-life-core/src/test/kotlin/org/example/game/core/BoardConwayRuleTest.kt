@@ -1,4 +1,4 @@
-package org.example.game
+package org.example.game.core
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
