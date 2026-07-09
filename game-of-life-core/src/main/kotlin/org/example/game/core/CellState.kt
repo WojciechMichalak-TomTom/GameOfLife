@@ -1,5 +1,5 @@
 package org.example.game.core
 
-enum class BasicCellState {
+enum class CellState {
     DEAD, ALIVE
 }

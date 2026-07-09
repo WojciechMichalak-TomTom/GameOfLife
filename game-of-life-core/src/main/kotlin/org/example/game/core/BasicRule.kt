@@ -1,16 +1,16 @@
 package org.example.game.core
 
 class ConwayRule : Rule {
-    override fun nextState(state: BasicCellState, neighbors: Int): BasicCellState {
-        return if (neighbors == 3 || (neighbors == 2 && state == BasicCellState.ALIVE)) {
-            BasicCellState.ALIVE
+    override fun nextState(state: CellState, neighbors: Int): CellState {
+        return if (neighbors == 3 || (neighbors == 2 && state == CellState.ALIVE)) {
+            CellState.ALIVE
         } else {
-            BasicCellState.DEAD
+            CellState.DEAD
         }
     }
 
 }
 
 interface Rule {
-    fun nextState(state: BasicCellState, neighbors: Int): BasicCellState
+    fun nextState(state: CellState, neighbors: Int): CellState
 }

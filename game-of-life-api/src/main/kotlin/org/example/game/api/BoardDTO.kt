@@ -1,5 +1,10 @@
 package org.example.game.api
 
+data class PositionDTO(
+    val x: Int,
+    val y: Int
+)
+
 data class BoardDTO(
-    val grid: List<List<CellStateDTO>>
+    val aliveCells: List<PositionDTO>
 )

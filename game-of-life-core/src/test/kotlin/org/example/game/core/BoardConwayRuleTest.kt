@@ -1,141 +1,135 @@
 package org.example.game.core
 
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class BoardConwayRuleTest {
 
-    val D = BasicCellState.DEAD
-    val A = BasicCellState.ALIVE
+    private fun createBoard(positions: List<Position>): Board {
+        val cells = HashMap<Position, CellState>()
+        for (pos in positions) {
+            cells[pos] = CellState.ALIVE
+        }
+        return Board(cells, ConwayRule())
+    }
 
     @Test
     fun `when next generation of 3x3 grid pattern should return proper next step pattern`() {
-        val grid = arrayOf(
-            arrayOf(D, D, A),
-            arrayOf(D, A, A),
-            arrayOf(A, D, A)
-        )
-        val board = Board(grid, ConwayRule())
+        // D D A
+        // D A A
+        // A D A
+        val board = createBoard(listOf(
+            Position(0, 2),
+            Position(1, 1), Position(1, 2),
+            Position(2, 0), Position(2, 2)
+        ))
 
         val board2 = board.nextStep()
 
-        val expectedGrid = arrayOf(
-            arrayOf(D, A, A),
-            arrayOf(D, D, A),
-            arrayOf(D, D, A)
+        // D A A D
+        // D D A A
+        // D D A D
+        val expectedCells = hashMapOf(
+            Position(0, 1) to CellState.ALIVE,
+            Position(0, 2) to CellState.ALIVE,
+            Position(1, 2) to CellState.ALIVE,
+            Position(1, 3) to CellState.ALIVE,
+            Position(2, 2) to CellState.ALIVE
         )
 
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
-
+        assertEquals(expectedCells, board2.cells)
     }
-
 
     @Test
     fun `when next generation of empty board should return empty board`() {
-        val grid = arrayOf(
-            arrayOf(D, D, D),
-            arrayOf(D, D, D),
-            arrayOf(D, D, D)
-        )
-        val board = Board(grid, ConwayRule())
+        val board = createBoard(emptyList())
 
         val board2 = board.nextStep()
 
-        val expectedGrid = arrayOf(
-            arrayOf(D, D, D),
-            arrayOf(D, D, D),
-            arrayOf(D, D, D)
-        )
+        val expectedCells = hashMapOf<Position, CellState>()
 
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
+        assertEquals(expectedCells, board2.cells)
     }
 
     @Test
     fun `when next generation of live cell with fewer than 2 neighbours should cell die`() {
-        val grid = arrayOf(
-            arrayOf(A, A, D),
-            arrayOf(D, D, D),
-            arrayOf(D, D, D)
-        )
-        val board = Board(grid, ConwayRule())
-
+        // A A
+        val board = createBoard(listOf(
+            Position(0, 0), Position(0, 1)
+        ))
 
         val board2 = board.nextStep()
 
+        val expectedCells = hashMapOf<Position, CellState>()
 
-        val expectedGrid = arrayOf(
-            arrayOf(D, D, D),
-            arrayOf(D, D, D),
-            arrayOf(D, D, D)
-        )
-
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
+        assertEquals(expectedCells, board2.cells)
     }
 
     @Test
     fun `when next generation of live cell with 2 or 3 neighbours should cell live`() {
-        val grid = arrayOf(
-            arrayOf(A, A, D),
-            arrayOf(A, A, D),
-            arrayOf(D, D, D)
-        )
-        val board = Board(grid, ConwayRule())
-
+        // A A
+        // A A
+        val board = createBoard(listOf(
+            Position(0, 0), Position(0, 1),
+            Position(1, 0), Position(1, 1)
+        ))
 
         val board2 = board.nextStep()
 
-
-        val expectedGrid = arrayOf(
-            arrayOf(A, A, D),
-            arrayOf(A, A, D),
-            arrayOf(D, D, D)
+        // A A
+        // A A
+        val expectedCells = hashMapOf(
+            Position(0, 0) to CellState.ALIVE, Position(0, 1) to CellState.ALIVE,
+            Position(1, 0) to CellState.ALIVE, Position(1, 1) to CellState.ALIVE
         )
 
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
+        assertEquals(expectedCells, board2.cells)
     }
 
     @Test
     fun `when next generation of live cell with more than 3 should cell die`() {
-        val grid = arrayOf(
-            arrayOf(A, A, A),
-            arrayOf(A, A, A),
-            arrayOf(A, A, A)
+        // A D A
+        // D A D
+        // A D A
+        val board = createBoard(listOf(
+            Position(0, 0), Position(0, 2),
+            Position(1, 1),
+            Position(2, 0), Position(2, 2)
+        ))
+
+        val board2 = board.nextStep()
+
+        // D A D
+        // A D A
+        // D A D
+        val expectedCells = hashMapOf(
+            Position(0, 1) to CellState.ALIVE,
+            Position(1, 0) to CellState.ALIVE,
+            Position(1, 2) to CellState.ALIVE,
+            Position(2, 1) to CellState.ALIVE
         )
-        val board = Board(grid, ConwayRule())
 
-
-        val board2 =  board.nextStep()
-
-
-        val expectedGrid = arrayOf(
-            arrayOf(A, D, A),
-            arrayOf(D, D, D),
-            arrayOf(A, D, A)
-        )
-
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
+        assertEquals(expectedCells, board2.cells)
     }
 
     @Test
     fun `when next generation of dead cell with 3 neighbours should cell live`() {
-        val grid = arrayOf(
-            arrayOf(A, A, D),
-            arrayOf(A, D, D),
-            arrayOf(D, D, D)
-        )
-        val board = Board(grid, ConwayRule())
-
+        // A A
+        // A D
+        val board = createBoard(listOf(
+            Position(0, 0), Position(0, 1),
+            Position(1, 0)
+        ))
 
         val board2 = board.nextStep()
 
-
-        val expectedGrid = arrayOf(
-            arrayOf(A, A, D),
-            arrayOf(A, A, D),
-            arrayOf(D, D, D)
+        // A A
+        // A A
+        val expectedCells = hashMapOf(
+            Position(0, 0) to CellState.ALIVE, Position(0, 1) to CellState.ALIVE,
+            Position(1, 0) to CellState.ALIVE, Position(1, 1) to CellState.ALIVE
         )
 
-        Assertions.assertTrue(expectedGrid.contentDeepEquals(board2.grid))
+        assertEquals(expectedCells, board2.cells)
     }
-
 }

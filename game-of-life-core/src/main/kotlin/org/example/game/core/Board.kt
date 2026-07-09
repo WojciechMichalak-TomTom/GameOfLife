@@ -2,58 +2,67 @@ package org.example.game.core
 
 import kotlin.random.Random
 
-class Board(val grid: Array<Array<BasicCellState>>,
+class Board(val cells: MutableMap<Position, CellState>,
             private val rule: Rule) {
 
-    fun randomize(): Board {
-        val size = grid.size
-        val newGrid = Array(size) { Array(size) { BasicCellState.DEAD } }
-        for (i in 0 until size) {
-            for (j in 0 until size) {
-                if (Random.nextBoolean()) {
-                    newGrid[i][j] = BasicCellState.ALIVE
-                } else {
-                    newGrid[i][j] = BasicCellState.DEAD
-                }
-            }
-        }
-        return Board(newGrid, rule)
-    }
+//    fun randomize(): Board {
+//        val size = cells.size
+//        val newGrid = Array(size) { Array(size) { CellState.DEAD } }
+//        for (i in 0 until size) {
+//            for (j in 0 until size) {
+//                if (Random.nextBoolean()) {
+//                    newGrid[i][j] = CellState.ALIVE
+//                } else {
+//                    newGrid[i][j] = CellState.DEAD
+//                }
+//            }
+//        }
+//        return Board(newGrid, rule)
+//    }
 
     fun nextStep(): Board {
-        val size = grid.size
-        val newGrid = Array(size) { Array(size) { BasicCellState.DEAD } }
-            for (i in 0 until size) {
-                for (j in 0 until size) {
-                    val neighbors = getNeighborsCount(i, j)
-                    newGrid[i][j] = rule.nextState(grid[i][j], neighbors)
-                }
-            }
 
-        return Board(newGrid, rule)
-    }
+        val newCells = HashMap<Position, CellState>()
+        val positionsToCheck = HashSet<Position>()
 
-    private fun getNeighborsCount(x: Int, y: Int): Int {
-        var neighbors = 0
+        for (position in cells.keys) {
+            positionsToCheck.add(position)
+            positionsToCheck.addAll(getNeighborsPositions(position))
+        }
 
-        for (numX in -1..1) {
-            for (numY in -1..1) {
-                if (numX != 0 || numY != 0) {
-                    val targetX = x + numX
-                    val targetY = y + numY
+        for (position in positionsToCheck) {
+            val state = cells[position] ?: CellState.DEAD
+            val neighborsCount = getNeighborsCount(position)
+            val nextState = rule.nextState(state, neighborsCount)
 
-                    if (isInsideGrid(targetX, targetY) && grid[targetX][targetY] == BasicCellState.ALIVE) {
-                        neighbors++
-                    }
-                }
-
+            if (nextState != CellState.DEAD) {
+                newCells[position] = nextState
             }
         }
 
-        return neighbors
+        return Board(newCells, rule)
     }
 
-    private fun isInsideGrid(x: Int, y: Int): Boolean {
-        return !(x < 0 || x > grid.size - 1 || y < 0 || y > grid.size - 1)
+    private fun getNeighborsCount(position: Position): Int {
+        var count = 0
+        for (neighborPosition in getNeighborsPositions(position)) {
+            if (cells[neighborPosition] == CellState.ALIVE) {
+                count++
+            }
+        }
+
+        return count
+    }
+
+    private fun getNeighborsPositions(pos: Position): List<Position> {
+        val neighbors = mutableListOf<Position>()
+        for (dx in -1..1) {
+            for (dy in -1..1) {
+                if (dx != 0 || dy != 0) {
+                    neighbors.add(Position(pos.x + dx, pos.y + dy))
+                }
+            }
+        }
+        return neighbors
     }
 }

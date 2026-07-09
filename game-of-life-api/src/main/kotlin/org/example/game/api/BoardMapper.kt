@@ -1,36 +1,28 @@
 package org.example.game.api
 
-import org.example.game.core.BasicCellState
+import org.example.game.core.CellState
 import org.example.game.core.Board
+import org.example.game.core.Position
 import org.example.game.core.Rule
 
 
 class BoardMapper {
 
     fun toDto(board: Board): BoardDTO {
-        return BoardDTO(grid = board.grid.map { row ->
-            row.map { cell ->
-                when (cell) {
-                    BasicCellState.ALIVE -> CellStateDTO.ALIVE
-                    BasicCellState.DEAD -> CellStateDTO.DEAD
-                }
-            }
-        })
+        val aliveCells = board.cells.keys.map { position ->
+            PositionDTO(position.x, position.y)
+        }
+        return BoardDTO(aliveCells)
     }
 
     fun toEntity(dto: BoardDTO, rule: Rule): Board {
-        val size = dto.grid.size
-        val grid = Array(size) { Array(size) { BasicCellState.DEAD } }
 
-        for (x in 0 until size) {
-            for (y in 0 until size) {
-                grid[x][y] = when (dto.grid[x][y]) {
-                    CellStateDTO.ALIVE -> BasicCellState.ALIVE
-                    CellStateDTO.DEAD -> BasicCellState.DEAD
-                }
-            }
+        val cells = HashMap<Position, CellState>()
+
+        for (positionDTO in dto.aliveCells) {
+            cells[Position(positionDTO.x, positionDTO.y)] = CellState.ALIVE
         }
 
-        return Board(grid, rule)
+        return Board(cells, rule)
     }
 }
