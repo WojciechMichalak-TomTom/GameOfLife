@@ -2,11 +2,11 @@ package org.example.game
 
 import kotlin.random.Random
 
-class Board(val size: Int,
-            val grid: Array<Array<BasicCellState>>,
+class Board(val grid: Array<Array<BasicCellState>>,
             private val rule: Rule) {
 
     fun randomize(): Board {
+        val size = grid.size
         val newGrid = Array(size) { Array(size) { BasicCellState.DEAD } }
         for (i in 0 until size) {
             for (j in 0 until size) {
@@ -17,19 +17,20 @@ class Board(val size: Int,
                 }
             }
         }
-        return Board(size, newGrid, rule)
+        return Board(newGrid, rule)
     }
 
     fun nextStep(): Board {
+        val size = grid.size
         val newGrid = Array(size) { Array(size) { BasicCellState.DEAD } }
             for (i in 0 until size) {
                 for (j in 0 until size) {
                     val neighbors = getNeighborsCount(i, j)
-                    newGrid[i][j] = rule.next(grid[i][j], neighbors)
+                    newGrid[i][j] = rule.nextState(grid[i][j], neighbors)
                 }
             }
 
-        return Board(size, newGrid, rule)
+        return Board(newGrid, rule)
     }
 
     private fun getNeighborsCount(x: Int, y: Int): Int {
@@ -53,6 +54,6 @@ class Board(val size: Int,
     }
 
     private fun isInsideGrid(x: Int, y: Int): Boolean {
-        return !(x < 0 || x > size - 1 || y < 0 || y > size - 1)
+        return !(x < 0 || x > grid.size - 1 || y < 0 || y > grid.size - 1)
     }
 }
