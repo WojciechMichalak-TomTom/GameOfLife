@@ -5,21 +5,6 @@ import kotlin.random.Random
 class Board(val cells: MutableMap<Position, CellState>,
             private val rule: Rule) {
 
-//    fun randomize(): Board {
-//        val size = cells.size
-//        val newGrid = Array(size) { Array(size) { CellState.DEAD } }
-//        for (i in 0 until size) {
-//            for (j in 0 until size) {
-//                if (Random.nextBoolean()) {
-//                    newGrid[i][j] = CellState.ALIVE
-//                } else {
-//                    newGrid[i][j] = CellState.DEAD
-//                }
-//            }
-//        }
-//        return Board(newGrid, rule)
-//    }
-
     fun nextStep(): Board {
 
         val newCells = HashMap<Position, CellState>()
