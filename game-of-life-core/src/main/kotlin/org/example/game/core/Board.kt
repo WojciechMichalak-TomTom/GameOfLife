@@ -1,11 +1,8 @@
 package org.example.game.core
 
-import kotlin.random.Random
+class Board(val cells: Map<Position, CellState>) {
 
-class Board(val cells: MutableMap<Position, CellState>,
-            private val rule: Rule) {
-
-    fun nextStep(): Board {
+    fun nextStep(rule: Rule): Board {
 
         val newCells = HashMap<Position, CellState>()
         val positionsToCheck = HashSet<Position>()
@@ -25,7 +22,7 @@ class Board(val cells: MutableMap<Position, CellState>,
             }
         }
 
-        return Board(newCells, rule)
+        return Board(newCells)
     }
 
     private fun getNeighborsCount(position: Position): Int {

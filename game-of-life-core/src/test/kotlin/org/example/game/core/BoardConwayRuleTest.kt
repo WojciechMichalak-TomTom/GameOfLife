@@ -10,7 +10,7 @@ class BoardConwayRuleTest {
         for (pos in positions) {
             cells[pos] = CellState.ALIVE
         }
-        return Board(cells, ConwayRule())
+        return Board(cells)
     }
 
     @Test
@@ -24,7 +24,7 @@ class BoardConwayRuleTest {
             Position(2, 0), Position(2, 2)
         ))
 
-        val board2 = board.nextStep()
+        val board2 = board.nextStep(ConwayRule())
 
         // D A A D
         // D D A A
@@ -44,7 +44,7 @@ class BoardConwayRuleTest {
     fun `when next generation of empty board should return empty board`() {
         val board = createBoard(emptyList())
 
-        val board2 = board.nextStep()
+        val board2 = board.nextStep(ConwayRule())
 
         val expectedCells = hashMapOf<Position, CellState>()
 
@@ -58,7 +58,7 @@ class BoardConwayRuleTest {
             Position(0, 0), Position(0, 1)
         ))
 
-        val board2 = board.nextStep()
+        val board2 = board.nextStep(ConwayRule())
 
         val expectedCells = hashMapOf<Position, CellState>()
 
@@ -74,7 +74,7 @@ class BoardConwayRuleTest {
             Position(1, 0), Position(1, 1)
         ))
 
-        val board2 = board.nextStep()
+        val board2 = board.nextStep(ConwayRule())
 
         // A A
         // A A
@@ -97,7 +97,7 @@ class BoardConwayRuleTest {
             Position(2, 0), Position(2, 2)
         ))
 
-        val board2 = board.nextStep()
+        val board2 = board.nextStep(ConwayRule())
 
         // D A D
         // A D A
@@ -121,7 +121,7 @@ class BoardConwayRuleTest {
             Position(1, 0)
         ))
 
-        val board2 = board.nextStep()
+        val board2 = board.nextStep(ConwayRule())
 
         // A A
         // A A

@@ -15,7 +15,7 @@ class BoardMapper {
         return BoardDTO(aliveCells)
     }
 
-    fun toEntity(dto: BoardDTO, rule: Rule): Board {
+    fun toEntity(dto: BoardDTO): Board {
 
         val cells = HashMap<Position, CellState>()
 
@@ -23,6 +23,6 @@ class BoardMapper {
             cells[Position(positionDTO.x, positionDTO.y)] = CellState.ALIVE
         }
 
-        return Board(cells, rule)
+        return Board(cells)
     }
 }

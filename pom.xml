@@ -12,6 +12,7 @@
     <modules>
         <module>game-of-life-core</module>
         <module>game-of-life-api</module>
+        <module>game-of-life-application</module>
     </modules>
 
     <properties>

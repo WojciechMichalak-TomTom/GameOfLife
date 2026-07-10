@@ -8,9 +8,4 @@ class ConwayRule : Rule {
             CellState.DEAD
         }
     }
-
-}
-
-interface Rule {
-    fun nextState(state: CellState, neighbors: Int): CellState
 }
