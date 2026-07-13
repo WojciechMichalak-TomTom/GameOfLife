@@ -1,37 +1,55 @@
 package org.example.game.api
 
 import io.restassured.RestAssured
-import org.hamcrest.Matchers.hasItems
+import io.restassured.http.ContentType.JSON
+import org.assertj.core.api.Assertions.assertThat
+import org.example.game.application.BoardRequestDTO
+import org.example.game.application.BoardResponseDTO
+import org.example.game.application.PositionDTO
+import org.example.game.application.RuleParams
 import org.junit.jupiter.api.Test
+import org.springframework.http.HttpStatus.OK
 
 class GameControllerTest : AbstractIntegrationTest() {
 
     @Test
     fun `when next generation of pattern should return proper next step pattern`() {
+        val bsRule: RuleParams = RuleParams.BSRule(
+            birthConditionValues = setOf(3),
+            survivesConditionValues = setOf(2, 3)
+        )
 
-        val request = """
-            {
-              "aliveCells": [
-                {"x": 1, "y": 1},
-                {"x": 1, "y": 2},
-                {"x": 2, "y": 1},
-                {"x": 2, "y": 2}
-              ]
-            }
-        """.trimIndent()
+        val request = BoardRequestDTO(
+            aliveCells = listOf(
+                PositionDTO(1, 1),
+                PositionDTO(1, 2),
+                PositionDTO(2, 1),
+                PositionDTO(2, 2)
+            ),
+            ruleParams = bsRule
+        )
 
-        RestAssured
+        val expectedResponse = BoardResponseDTO(
+            aliveCells = listOf(
+                PositionDTO(1, 1),
+                PositionDTO(1, 2),
+                PositionDTO(2, 1),
+                PositionDTO(2, 2)
+            )
+        )
+
+        val response = RestAssured
             .given()
-            .contentType("application/json")
+            .contentType(JSON)
             .body(request)
             .post("/game/next-step")
             .then()
-            .statusCode(200)
-            .body("aliveCells", hasItems(
-            mapOf("x" to 1, "y" to 1),
-            mapOf("x" to 1, "y" to 2),
-            mapOf("x" to 2, "y" to 1),
-            mapOf("x" to 2, "y" to 2)
-        ))
+            .statusCode(OK.value())
+            .extract()
+            .`as`(BoardResponseDTO::class.java)
+
+
+        assertThat(response.aliveCells)
+            .containsExactlyInAnyOrderElementsOf(expectedResponse.aliveCells)
     }
 }

@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test
 
 class BoardConwayRuleTest {
 
+
+    private val conwayRule = BSRule(birthCondition = setOf(3), survivesCondition = setOf(2, 3))
+
     private fun createBoard(positions: List<Position>): Board {
         val cells = HashMap<Position, CellState>()
         for (pos in positions) {
@@ -24,7 +27,7 @@ class BoardConwayRuleTest {
             Position(2, 0), Position(2, 2)
         ))
 
-        val board2 = board.nextStep(ConwayRule())
+        val board2 = board.nextStep(conwayRule)
 
         // D A A D
         // D D A A
@@ -44,7 +47,7 @@ class BoardConwayRuleTest {
     fun `when next generation of empty board should return empty board`() {
         val board = createBoard(emptyList())
 
-        val board2 = board.nextStep(ConwayRule())
+        val board2 = board.nextStep(conwayRule)
 
         val expectedCells = hashMapOf<Position, CellState>()
 
@@ -58,7 +61,7 @@ class BoardConwayRuleTest {
             Position(0, 0), Position(0, 1)
         ))
 
-        val board2 = board.nextStep(ConwayRule())
+        val board2 = board.nextStep(conwayRule)
 
         val expectedCells = hashMapOf<Position, CellState>()
 
@@ -74,7 +77,7 @@ class BoardConwayRuleTest {
             Position(1, 0), Position(1, 1)
         ))
 
-        val board2 = board.nextStep(ConwayRule())
+        val board2 = board.nextStep(conwayRule)
 
         // A A
         // A A
@@ -97,7 +100,7 @@ class BoardConwayRuleTest {
             Position(2, 0), Position(2, 2)
         ))
 
-        val board2 = board.nextStep(ConwayRule())
+        val board2 = board.nextStep(conwayRule)
 
         // D A D
         // A D A
@@ -121,7 +124,7 @@ class BoardConwayRuleTest {
             Position(1, 0)
         ))
 
-        val board2 = board.nextStep(ConwayRule())
+        val board2 = board.nextStep(conwayRule)
 
         // A A
         // A A
