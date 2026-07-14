@@ -5,7 +5,7 @@ import org.example.game.core.Board
 import org.example.game.core.CellState
 import org.example.game.core.Position
 
-class GameEngineService : CalculateNextStepUseCase {
+class GameEngineService : CalculateNextStepUseCase, GenerateRandomBoardUseCase {
 
 
     override fun calculateNextStep(
@@ -23,6 +23,11 @@ class GameEngineService : CalculateNextStepUseCase {
 
 
         return board.nextStep(rule).toDto()
+    }
+
+    override fun generateRandom(width: Int, height: Int): BoardResponseDTO {
+        val board = Board.createRandom(Pair(width, height))
+        return board.toDto()
     }
 }
 

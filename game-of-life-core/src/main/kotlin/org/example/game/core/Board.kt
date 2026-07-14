@@ -1,6 +1,32 @@
 package org.example.game.core
 
+import kotlin.random.Random
+
+
 class Board(val cells: Map<Position, CellState>) {
+
+    companion object {
+        fun createRandom(dimensions: Pair<Int, Int>): Board {
+            val (width, height) = dimensions
+            val cells = HashMap<Position, CellState>()
+
+            val startX = -width / 2
+            val endX = width / 2
+
+            val startY = -height / 2
+            val endY = height / 2
+
+            for (x in startX..endX) {
+                for (y in startY..endY) {
+                    if (Random.nextBoolean()) {
+                        cells[Position(x, y)] = CellState.ALIVE
+                    }
+                }
+            }
+            return Board(cells)
+        }
+    }
+
 
     fun nextStep(rule: Rule): Board {
 
